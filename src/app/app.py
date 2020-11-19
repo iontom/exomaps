@@ -51,7 +51,7 @@ def home():
     # db.execute("UPDATE public.films SET title='Some2016Film' WHERE year='2016'")
     # Delete
     # db.execute("DELETE FROM public.films WHERE year='2016'")  
-    print('hello')
+    print('hello world')
     return df.to_html()
     # from models import Home
     # home = Home.query.all()
