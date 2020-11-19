@@ -1,0 +1,6 @@
+Flask==1.0.2
+redis==3.3.11
+flask_sqlalchemy
+psycopg2
+pandas
+requests
