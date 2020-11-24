@@ -4,3 +4,6 @@ flask_sqlalchemy
 psycopg2
 pandas
 requests
+dash
+dash-bootstrap-components
+Flask-Bootstrap4
