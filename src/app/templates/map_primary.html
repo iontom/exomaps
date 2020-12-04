@@ -1,0 +1,26 @@
+<div id="SceneBox">
+  <!-- This will contain the canvas -->
+  <div id="WebGLContainer" ></div>
+
+  <!-- socket.io -->
+  <script src="/static/js/lib/socket.io.min.js"></script>
+
+  <!-- three.js resources -->
+  <!--<script src="/static/js/lib/three.min.js"></script>-->
+
+
+  <script src="https://unpkg.com/three@0.123.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/three@0.123.0/build/three.module.js"></script>
+  <script src="https://unpkg.com/three@0.92.0/examples/js/controls/TrackballControls.js"></script>
+  <script src="/static/js/lib/THREEx.WindowResize.js"></script>
+   dat.gui
+  <script src="/static/js/lib/dat.gui.js"></script>
+
+  <!-- my script -->
+  <script src="/static/js/exomaps/scenebuilder.js"></script>
+  <script src="/static/js/exomaps/starmap.js"></script>
+  <script>
+      //called upon loading
+      startSTARMAP();
+  </script>
+</div>

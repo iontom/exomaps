@@ -1,12 +1,13 @@
 {% extends "base.html" %}
-{% block title %}Registered Guests{% endblock %}
+{% block title %}Home{% endblock %}
 {% block head %}
   {{ super() }}
 {% endblock %}
 {% block content %}
-  <h1>HOME</h1>
-<div class="dftable"></div>
-{{df_table|safe}}
+<div class="row">
+  <div class="col-8">{% include "map_primary.html" %}</div>
+  <div class="col-2">{{df_table|safe}}</div>
+</div>
 
 <!--<table class="table table-striped">-->
   <!--<thead>-->
@@ -23,7 +24,7 @@
     <!--</tr>-->
   <!--{% endfor %}-->
 <!--</table>-->
-<p class="navbar-btn">
-  <a href="/register" class="btn btn-default">Register!</a>
-</p>
+<!--<p class="navbar-btn">-->
+  <!--<a href="/register" class="btn btn-default">Register!</a>-->
+<!--</p>-->
 {% endblock %}

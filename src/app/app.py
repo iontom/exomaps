@@ -2,13 +2,17 @@ import os
 import pandas as pd
 from redis import Redis
 from flask import Flask, render_template, request, session
+from flask_socketio import SocketIO, emit
 from flask_bootstrap import Bootstrap
 # from flask_migrate import Migrate
 # from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
+from py import main, app, socketio, redis
+from py.app_controller import SceneBuilder as sb
 
-app = Flask(__name__)
-redis = Redis(host='redis', port=6379)
+# app = Flask(__name__)
+# socketio = SocketIO(app, async_mode=None)
+# redis = Redis(host='redis', port=6379)
 
 database_uri = 'postgresql+psycopg2://{dbuser}:{dbpass}@{dbhost}:{dbport}/{dbname}'.format(
     dbuser=os.environ['DBUSER'],
@@ -19,13 +23,18 @@ database_uri = 'postgresql+psycopg2://{dbuser}:{dbpass}@{dbhost}:{dbport}/{dbnam
 )
 db = create_engine(database_uri)
 
+
+
 # tpath = '/code/src/app/templates'
-app = Flask(__name__, template_folder='./templates')
+# app = Flask(__name__, template_folder='./templates')
 
 @app.route('/')
 @app.route('/index')
 def home():
-    df = pd.read_sql_query('SELECT * FROM public.film_test',con=db)
+    scene_data = [{'foo': [1, 2, 3, 4], 'fee': 'hello'}]
+    # scene = sb(app, scene_data)
+
+    df = pd.read_sql_query('SELECT * FROM public.film_test', con=db)
     # return df.to_html()
     print('debug')
     table_out = df.to_html().replace('class="dataframe"', 'class="table table-striped"')
@@ -33,6 +42,16 @@ def home():
 
     return render_template('home.html', title='Space!', df_table=table_out)
 
+# flask stuff
+@app.route("/viewer")
+def viewer():
+    return render_template("viewer.html")
+
+@app.route("/gui")
+def gui():
+    scene_data = [{'foo': [1, 2, 3, 4], 'fee': 'hello'}]
+
+    return render_template("gui.html")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)
