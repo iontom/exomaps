@@ -2,21 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="574c9089-9c81-4fe9-9c7b-5cbce9a50fd9" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/app/__init__.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/app/py/__init__.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/app/py/app_controller.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/app/static/js/exomaps/scenebuilder.js" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/app/static/js/exomaps/starmap.js" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/app/templates/map_primary.html" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/app/templates/viewer.html" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/src/app/app.py" afterPath="$PROJECT_DIR$/src/app/app.py" />
-      <change beforePath="$PROJECT_DIR$/src/app/static/css/bootstrap-3.3.7.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/static/css/bootstrap-theme-3.3.7.css" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/app/static/css/dashboard-0.1.css" afterPath="$PROJECT_DIR$/src/app/static/css/dashboard-0.1.css" />
-      <change beforePath="$PROJECT_DIR$/src/app/templates/base.html" afterPath="$PROJECT_DIR$/src/app/templates/base.html" />
-      <change beforePath="$PROJECT_DIR$/src/app/templates/home.html" afterPath="$PROJECT_DIR$/src/app/templates/home.html" />
-      <change beforePath="$PROJECT_DIR$/src/requirements.txt" afterPath="$PROJECT_DIR$/src/requirements.txt" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -51,16 +38,6 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="Dockerfile" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/Dockerfile">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="25">
-                  <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
           <file leaf-file-name="docker-compose.yml" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/docker-compose.yml">
               <provider selected="true" editor-type-id="text-editor">
@@ -83,11 +60,21 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="map_primary.html" pinned="false" current-in-tab="true">
+          <file leaf-file-name="map_primary.html" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/app/templates/map_primary.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="275">
-                  <caret line="11" column="15" lean-forward="false" selection-start-line="11" selection-start-column="15" selection-end-line="11" selection-end-column="65" />
+                <state relative-caret-position="450">
+                  <caret line="18" column="17" lean-forward="true" selection-start-line="18" selection-start-column="17" selection-end-line="18" selection-end-column="17" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/.gitignore">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="25">
+                  <caret line="1" column="7" lean-forward="false" selection-start-line="1" selection-start-column="7" selection-end-line="1" selection-end-column="7" />
                   <folding />
                 </state>
               </provider>
@@ -248,7 +235,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>port=</find>
       <find>MeshFaceMaterial</find>
       <find>updateParams</find>
       <find>drawCube</find>
@@ -278,6 +264,7 @@
       <find>camera</find>
       <find>WindowResize</find>
       <find>data.gui</find>
+      <find>.giti</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -315,13 +302,14 @@
         <option value="$PROJECT_DIR$/src/app/static/js/utils.js" />
         <option value="$PROJECT_DIR$/src/app/templates/map_primary.html" />
         <option value="$PROJECT_DIR$/src/app/static/js/exomaps/scenebuilder.js" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1347" />
-    <option name="y" value="281" />
-    <option name="width" value="2422" />
+    <option name="x" value="1344" />
+    <option name="y" value="319" />
+    <option name="width" value="1646" />
     <option name="height" value="1679" />
   </component>
   <component name="ProjectView">
@@ -351,65 +339,6 @@
               <item name="exomaps" type="b2602c69:ProjectViewProjectNode" />
               <item name="exomaps" type="462c0819:PsiDirectoryNode" />
               <item name="dbs" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="exomaps" type="b2602c69:ProjectViewProjectNode" />
-              <item name="exomaps" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="exomaps" type="b2602c69:ProjectViewProjectNode" />
-              <item name="exomaps" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="exomaps" type="b2602c69:ProjectViewProjectNode" />
-              <item name="exomaps" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="exomaps" type="b2602c69:ProjectViewProjectNode" />
-              <item name="exomaps" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-              <item name="css" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="exomaps" type="b2602c69:ProjectViewProjectNode" />
-              <item name="exomaps" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-              <item name="js" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="exomaps" type="b2602c69:ProjectViewProjectNode" />
-              <item name="exomaps" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-              <item name="js" type="462c0819:PsiDirectoryNode" />
-              <item name="exomaps" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="exomaps" type="b2602c69:ProjectViewProjectNode" />
-              <item name="exomaps" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-              <item name="js" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="exomaps" type="b2602c69:ProjectViewProjectNode" />
-              <item name="exomaps" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -455,10 +384,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1347" y="281" width="2422" height="1679" extended-state="0" />
+    <frame x="1344" y="319" width="1646" height="1679" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19333333" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2857143" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="true" content_ui="tabs" />
@@ -633,13 +562,6 @@
         <state relative-caret-position="625">
           <caret line="25" column="14" lean-forward="true" selection-start-line="25" selection-start-column="14" selection-end-line="25" selection-end-column="14" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -906,18 +828,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/templates/map_primary.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="275">
-          <caret line="11" column="15" lean-forward="false" selection-start-line="11" selection-start-column="15" selection-end-line="11" selection-end-column="65" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/app/static/js/exomaps/scenebuilder.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="200">
           <caret line="8" column="20" lean-forward="true" selection-start-line="8" selection-start-column="20" selection-end-line="8" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/templates/map_primary.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="18" column="17" lean-forward="true" selection-start-line="18" selection-start-column="17" selection-end-line="18" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="25">
+          <caret line="1" column="7" lean-forward="false" selection-start-line="1" selection-start-column="7" selection-end-line="1" selection-end-column="7" />
           <folding />
         </state>
       </provider>
