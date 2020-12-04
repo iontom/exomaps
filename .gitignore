@@ -1,6 +1,9 @@
 .idea/
 .vscode/
 *.code-workspace
+exo_ws.code-workspace
+.env
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
