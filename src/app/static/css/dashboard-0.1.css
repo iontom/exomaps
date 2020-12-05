@@ -74,3 +74,8 @@ footer {
  bottom: 0;
  width: 100%;
 }
+
+#WebGLContainer {
+    height: 88vh; /* %-height of the viewport */
+/*    position: fixed;*/
+}

@@ -7,7 +7,7 @@ class WEBSCENE {
         this.objects = [];
         this.createScene();
     }
-    createScene(scene_name, dom_frame) {
+    createScene(scene_name, dom_frame_name) {
 
         // Names the scene, permitting multiple new scenes to be added
         this.scene_name = scene_name;
@@ -32,19 +32,8 @@ class WEBSCENE {
         // Launch the Renderer
         this.renderer =	new THREE.WebGLRenderer({antialias:true});
         this.renderer.setSize(this.screenWidth, this.screenHeight);
-
-        // Add to the Scene
-        //this.container = document.getElementById('WebGLContainer');
-        //document.body.appendChild(this.renderer.domElement);
-
-
-        // Identify the DIV ID to constrain the scene to
-        this.dom_frame = dom_frame;
-        //  document.getElementById(dom_frame).appendChild(this.renderer.domElement);
-        this.container = document.getElementById(dom_frame);
-//        this.container = document.querySelector('#'+dom_frame);
-        //this.container.appendChild(this.render.domElement);
-        //document.body.appendChild(this.renderer.domElement);
+        this.dom_frame = dom_frame_name;
+        this.container = document.getElementById(dom_frame_name);
 
         // Determine Screen Size
         this.screenWidth = window.innerWidth;
@@ -55,38 +44,34 @@ class WEBSCENE {
         this.socket = io.connect(location.protocol + '//' + document.domain
                            + ':' + location.port + this.namespace);
 
-        //if window resizes
-        window.addEventListener('load', this.gen_frame, false)
-        window.addEventListener('resize', this.onWindowResize, false);
-
-         this.render();
-    }
-
-    gen_frame() {
-        //this.container.appendChild(this.render.domElement);
-        console.log('page loaded')
-        //document.body.appendChild(this.renderer.domElement);
-        //this.container.appendChild(this.render.domElement);
-
-//        var checkDiv = false;
-//        do {
-//            if (document.getElementById(this.dom_frame) != null) {
-//                this.container.appendChild(this.render.domElement);
-//                checkDiv = true;
-//                console.log('checking if div exists')
-//            };
-//        } while (checkDiv == false)
-
-
+        this.render();
         return this;
     }
 
-    onWindowResize() {
-        this.aspect = ( window.innerWidth / window.innerHeight );
+    gen_frame(self) {
+        //this.container.appendChild(this.render.domElement);
+        console.log('page loaded');
+        console.log(this);
+        document.body.appendChild(this.renderer.domElement);
+        return this;
+    }
+
+    resizeSceneFrame(self) {
+        console.log('Trying to resize - self');
+        console.log(self);
+        this.container = document.getElementById(this.dom_frame);
+        console.log(this.container);
+        var w = this.container.offsetWidth;
+        var h_dif = window.innerHeight - this.container.offsetHeight;
+        var h = Math.min(this.container.offsetHeight, window.innerHeight);
+        console.log(w, h);
+        this.aspect = ( w / h );
         this.camera.aspect = this.aspect;
         this.camera.updateProjectionMatrix();
-        this.renderer.setSize( window.innerWidth, window.innerHeight );
+        this.renderer.setSize( w, h );
+        //this.render();
         return this;
+
     }
 
 
@@ -101,11 +86,13 @@ class WEBSCENE {
         });
 
         this.renderer.render(this.scene, this.camera);
+        return this;
       }
 
       add(mesh) {
         this.objects.push(mesh);
         this.scene.add(mesh.getMesh());
+        return this;
       }
 
 }
