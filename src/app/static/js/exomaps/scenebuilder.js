@@ -1,10 +1,13 @@
 // SCENE BUILDER
-import * as THREE from "three";
+// import * as THREE from "three";
 
 // Have a single variable class that creates a scene
 class WEBSCENE {
-    constructor(scene_name, dom_frame) {
-        //var _this = this;
+    constructor() {
+        this.objects = [];
+        this.createScene();
+    }
+    createScene(scene_name, dom_frame) {
 
         // Names the scene, permitting multiple new scenes to be added
         this.scene_name = scene_name;
@@ -12,18 +15,7 @@ class WEBSCENE {
         // Socket Namespace to use
         this.namespace = '/starmap';
 
-        // Identify the DIV ID to constrain the scene to
-        this.dom_frame = dom_frame;
-
-        // Determine Screen Size
-        this.screenWidth = window.innerWidth;
-        this.screenHeight = window.innerHeight;
-        this.aspect = this.screenWidth / this.screenHeight;
-
-        this.container = document.getElementById('WebGLContainer');
-        this.renderer =	new THREE.WebGLRenderer({antialias:true});
-        this.renderer.setSize(this.screenWidth, this.screenHeight);
-
+        // Launch the scene object
         this.scene = new THREE.Scene();
 
         //for frustum
@@ -36,14 +28,57 @@ class WEBSCENE {
         this.camera.up.set(0, -1, 0);
 	    this.camera.position.z = 30;
 	    this.scene.add(this.camera);
+
+        // Launch the Renderer
+        this.renderer =	new THREE.WebGLRenderer({antialias:true});
+        this.renderer.setSize(this.screenWidth, this.screenHeight);
+
+        // Add to the Scene
+        //this.container = document.getElementById('WebGLContainer');
+        //document.body.appendChild(this.renderer.domElement);
+
+
+        // Identify the DIV ID to constrain the scene to
+        this.dom_frame = dom_frame;
+        //  document.getElementById(dom_frame).appendChild(this.renderer.domElement);
+        this.container = document.getElementById(dom_frame);
+//        this.container = document.querySelector('#'+dom_frame);
+        //this.container.appendChild(this.render.domElement);
+        //document.body.appendChild(this.renderer.domElement);
+
+        // Determine Screen Size
+        this.screenWidth = window.innerWidth;
+        this.screenHeight = window.innerHeight;
+        this.aspect = this.screenWidth / this.screenHeight;
+
+        // Socket
         this.socket = io.connect(location.protocol + '//' + document.domain
                            + ':' + location.port + this.namespace);
 
-        this.initScene();
-
         //if window resizes
+        window.addEventListener('load', this.gen_frame, false)
         window.addEventListener('resize', this.onWindowResize, false);
 
+         this.render();
+    }
+
+    gen_frame() {
+        //this.container.appendChild(this.render.domElement);
+        console.log('page loaded')
+        //document.body.appendChild(this.renderer.domElement);
+        //this.container.appendChild(this.render.domElement);
+
+//        var checkDiv = false;
+//        do {
+//            if (document.getElementById(this.dom_frame) != null) {
+//                this.container.appendChild(this.render.domElement);
+//                checkDiv = true;
+//                console.log('checking if div exists')
+//            };
+//        } while (checkDiv == false)
+
+
+        return this;
     }
 
     onWindowResize() {
@@ -54,21 +89,25 @@ class WEBSCENE {
         return this;
     }
 
-    // init the scene - #TODO add args?
-    initScene() {
 
-        // events
-        THREEx.WindowResize(this.renderer, this.camera);
+    // render the scene - #TODO add args?
+    render() {
+      requestAnimationFrame(() => {
+        this.render();
+      });
 
-        //controls
-        this.controls = new THREE.TrackballControls( this.camera, this.renderer.domElement );
+        this.objects.forEach((object) => {
+          object.update();
+        });
 
-        return this;
-    }
+        this.renderer.render(this.scene, this.camera);
+      }
 
-    animate() {
-       return this;
-    }
+      add(mesh) {
+        this.objects.push(mesh);
+        this.scene.add(mesh.getMesh());
+      }
+
 }
 
 

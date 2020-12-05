@@ -1,34 +1,47 @@
-function drawCube(){
-	var size = 10.;
-	// CUBE
-	var geometry = new THREE.CubeGeometry(size, size, size);
-	var cubeMaterials = [
-		new THREE.MeshBasicMaterial({color:"yellow", side: THREE.DoubleSide}),
-		new THREE.MeshBasicMaterial({color:"orange", side: THREE.DoubleSide}),
-		new THREE.MeshBasicMaterial({color:"red", side: THREE.DoubleSide}),
-		new THREE.MeshBasicMaterial({color:"green", side: THREE.DoubleSide}),
-		new THREE.MeshBasicMaterial({color:"blue", side: THREE.DoubleSide}),
-		new THREE.MeshBasicMaterial({color:"purple", side: THREE.DoubleSide}),
-	];
-	// Create a MeshFaceMaterial, which allows the cube to have different materials on each face
-	var cubeMaterial = new THREE.MeshFaceMaterial(cubeMaterials);
-	var cube = new THREE.Mesh(geometry, cubeMaterial);
+class Cube {
+  constructor(size) {
+    this.geometry = new THREE.BoxGeometry(size.width, size.height, size.depth);
+    this.material = new THREE.MeshBasicMaterial({
+      color: 0x00ff00
+    });
 
-    return cube;
+    this.mesh = new THREE.Mesh(this.geometry, this.material);
+  }
+
+  update() {
+    this.mesh.rotation.x += 0.01;
+    this.mesh.rotation.y += 0.0001;
+  }
+
+  getMesh() {
+    return this.mesh;
+  }
 }
 
-let star_scene = new WEBSCENE('starmap', 'SceneBox');
-// star_scene.initScene();
+let star_scene = new WEBSCENE();
+star_scene.createScene('starmap', 'WebGLContainer');
 
-function startSTARMAP(){
-    let geometry = new THREE.BoxBufferGeometry( 200, 200, 200 );
-    let material = new THREE.MeshBasicMaterial();
-    let mesh = new THREE.Mesh( geometry, material );
+star_scene.add(new Cube({
+              width: 10,
+              height: 10,
+              depth: 10
+              }));
 
-    //    cube = drawCube();
-    star_scene.scene.add( mesh );
-    console.log('making the scene')
-}
+//
+//
+//$(document).ready(function(){
+//
+//});
+
+//function startSTARMAP(){
+//    let geometry = new THREE.BoxBufferGeometry( 200, 200, 200 );
+//    let material = new THREE.MeshBasicMaterial();
+//    let mesh = new THREE.Mesh( geometry, material );
+//
+//    //    cube = drawCube();
+//    star_scene.scene.add( mesh );
+//    console.log('making the scene')
+//}
 
 
 

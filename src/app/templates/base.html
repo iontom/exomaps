@@ -12,6 +12,18 @@
   <script src="/static/js/dashboard-0.1.js"></script>
   <title>{% block title %}{% endblock %} - Exomapper</title>
   {% block head %}{% endblock %}
+
+  <script src="https://unpkg.com/three@0.123.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/three@0.123.0/build/three.module.js"></script>
+  <script src="https://unpkg.com/three@0.92.0/examples/js/controls/TrackballControls.js"></script>
+  <script src="/static/js/lib/THREEx.WindowResize.js"></script>
+  <script src="/static/js/lib/dat.gui.js"></script>
+  <!-- socket.io -->
+  <script src="/static/js/lib/socket.io.min.js"></script>
+
+  <!-- my script -->
+  <script src="/static/js/exomaps/scenebuilder.js"></script>
+  <script src="/static/js/exomaps/starmap.js" defer></script>
 </head>
 <body>
 {# Basic sidebar definition #}
