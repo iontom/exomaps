@@ -23,6 +23,9 @@ class WEBSCENE {
         this.zmin = 1;
         this.fov = 45.;
 
+        // Make a loader
+        this.loader = new THREE.TextureLoader();
+
         // build and position the camera
         this.camera = new THREE.PerspectiveCamera( this.fov, this.aspect, this.zmin, this.zmax);
         this.camera.up.set(0, -1, 0);
@@ -43,6 +46,8 @@ class WEBSCENE {
         // Socket
         this.socket = io.connect(location.protocol + '//' + document.domain
                            + ':' + location.port + this.namespace);
+
+        this.controls = new THREE.OrbitControls( this.camera, this.renderer.domElement );
 
         this.render();
         return this;
@@ -82,7 +87,10 @@ class WEBSCENE {
       });
 
         this.objects.forEach((object) => {
-          object.update();
+          if (typeof object.update !== "undefined") {
+            // safe to use the function
+            object.update();
+           }
         });
 
         this.renderer.render(this.scene, this.camera);
@@ -94,6 +102,15 @@ class WEBSCENE {
         this.scene.add(mesh.getMesh());
         return this;
       }
+
+//      animateGUI() {
+//        requestAnimationFrame( animateGUI );
+//        this.controls.update();
+//        //externalParams.gui.update();
+//        this.controls.update();
+//        this.renderer.render( this.scene, this.camera );
+//        return this;
+//    }
 
 }
 
@@ -200,8 +217,8 @@ class WEBSCENE {
 //	// events
 //	THREEx.WindowResize(internalParams.renderer, internalParams.camera);
 //
-//	//controls
-//	internalParams.controls = new THREE.TrackballControls( internalParams.camera, internalParams.renderer.domElement );
+	//controls
+	//internalParams.controls = new THREE.TrackballControls( internalParams.camera, internalParams.renderer.domElement );
 //
 //
 //}
