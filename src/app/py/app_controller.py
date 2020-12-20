@@ -55,7 +55,7 @@ scene_data = [{'foo': [1, 2, 3, 4], 'fee': 'hello'}]
 scene1 = SceneBuilder(scene_data)
 
 # testing the connection
-@socketio.on('connection_test', namespace='/test')
+@socketio.on('connection_test', namespace='/starmap')
 def connection_test(message):
     session['receive_count'] = session.get('receive_count', 0) + 1
     emit('connection_response', {'data': message['data'], 'count': session['receive_count']})
