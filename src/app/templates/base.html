@@ -14,9 +14,15 @@
   {% block head %}{% endblock %}
 
   <script src="https://unpkg.com/three@0.123.0/build/three.min.js"></script>
-  <script src="https://unpkg.com/three@0.123.0/build/three.module.js"></script>
+  <script type="module" src="https://unpkg.com/three@0.123.0/build/three.module.js"></script>
   <script src="https://unpkg.com/three@0.123.0/examples/js/controls/TrackballControls.js"></script>
   <script src="https://unpkg.com/three@0.123.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://unpkg.com/three@0.123.0/examples/js/renderers/CSS2DRenderer.js"></script>
+  <script type="module" src="https://unpkg.com/three@0.123.0/examples/jsm/renderers/CSS2DRenderer.js"></script>
+  <script type="module" src="https://unpkg.com/three@0.123.0/examples/jsm/postprocessing/EffectComposer.js"></script>
+  <script type="module" src="https://unpkg.com/three@0.123.0/examples/jsm/postprocessing/RenderPass.js"></script>
+  <script type="module" src="https://unpkg.com/three@0.123.0/examples/jsm/postprocessing/ShaderPass.js"></script>
+  <script type="module" src="https://unpkg.com/three@0.123.0/examples/jsm/postprocessing/UnrealBloomPass.js"></script>
   <script src="/static/js/lib/THREEx.WindowResize.js"></script>
   <script src="/static/js/lib/dat.gui.js"></script>
   <!-- socket.io -->

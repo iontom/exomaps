@@ -1,5 +1,7 @@
 import os
 import pandas as pd
+import mimetypes
+
 from redis import Redis
 from flask import Flask, render_template, request, session
 from flask_socketio import SocketIO, emit, send
@@ -13,6 +15,8 @@ from threading import Timer, Lock
 
 app = Flask(__name__)
 socket_ = SocketIO(app, async_mode=None)
+
+mimetypes.add_type('application/javascript', '.mjs')
 
 thread = None
 thread_lock = Lock()
@@ -80,7 +84,7 @@ def handle_message(msg):
     size, r, g, b, x, y, z
     FROM dm_galaxy.star_render_info
     ORDER BY distance ASC
-    LIMIT 20
+    LIMIT 100
     """,
                            con=db)
     print(df)

@@ -79,3 +79,11 @@ footer {
     height: 88vh; /* %-height of the viewport */
 /*    position: fixed;*/
 }
+
+.starlabel {
+    color: #FFFFFF;
+    font-size: 12px;
+    font-family: sans-serif;
+    padding: 2px;
+    background: rgba( 0, 0, 0, .6 );
+}

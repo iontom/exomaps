@@ -43,11 +43,18 @@ class WEBSCENE {
         this.screenHeight = window.innerHeight;
         this.aspect = this.screenWidth / this.screenHeight;
 
+        this.labelRenderer = new THREE.CSS2DRenderer();
+        this.labelRenderer.setSize( window.innerWidth, window.innerHeight );
+        this.labelRenderer.domElement.style.position = 'absolute';
+        this.labelRenderer.domElement.style.top = '0px';
+        //document.body.appendChild( labelRenderer.domElement );
+        //document.getElementById(dom_frame_name).appendChild( this.labelRenderer.domElement );
+
         // Socket
         this.socket = io.connect(location.protocol + '//' + document.domain
                            + ':' + location.port + this.namespace);
 
-        this.controls = new THREE.OrbitControls( this.camera, this.renderer.domElement );
+        this.controls = new THREE.OrbitControls( this.camera, this.labelRenderer.domElement );
 
         this.render();
         return this;
@@ -57,7 +64,8 @@ class WEBSCENE {
         //this.container.appendChild(this.render.domElement);
         console.log('page loaded');
         console.log(this);
-        document.body.appendChild(this.renderer.domElement);
+        //document.body.appendChild(this.renderer.domElement);
+        document.body.appendChild( this.labelRenderer.domElement );
         return this;
     }
 
@@ -74,6 +82,7 @@ class WEBSCENE {
         this.camera.aspect = this.aspect;
         this.camera.updateProjectionMatrix();
         this.renderer.setSize( w, h );
+        this.labelRenderer.setSize( w, h );
         //this.render();
         return this;
 
@@ -94,6 +103,7 @@ class WEBSCENE {
         });
 
         this.renderer.render(this.scene, this.camera);
+        this.labelRenderer.render(this.scene, this.camera);
         return this;
       }
 
