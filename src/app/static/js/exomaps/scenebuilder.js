@@ -9,6 +9,19 @@ class WEBSCENE {
     }
     createScene(scene_name, dom_frame_name) {
 
+        this.ENTIRE_SCENE = 0;
+        this.BLOOM_SCENE = 1;
+        this.bloomLayer = new THREE.Layers();
+        this.bloomLayer.set( this.BLOOM_SCENE );
+
+        this.bloom_params = {
+				exposure: 1,
+				bloomStrength: 5,
+				bloomThreshold: 0,
+				bloomRadius: 0,
+				scene: "Scene with Glow"
+			};
+
         // Names the scene, permitting multiple new scenes to be added
         this.scene_name = scene_name;
 
@@ -35,6 +48,7 @@ class WEBSCENE {
         // Launch the Renderer
         this.renderer =	new THREE.WebGLRenderer({antialias:true});
         this.renderer.setSize(this.screenWidth, this.screenHeight);
+        this.renderer.toneMapping = THREE.ReinhardToneMapping;
         this.dom_frame = dom_frame_name;
         this.container = document.getElementById(dom_frame_name);
 
@@ -42,6 +56,43 @@ class WEBSCENE {
         this.screenWidth = window.innerWidth;
         this.screenHeight = window.innerHeight;
         this.aspect = this.screenWidth / this.screenHeight;
+
+        this.aspect_vec = new THREE.Vector2(window.innerWidth, window.innerHeight);
+
+
+        this.bloomLayer = new THREE.Layers();
+		this.bloomLayer.set(1);
+
+        // Create the render pass bloom effect
+        this.renderScene = new THREE.RenderPass( this.scene, this.camera );
+        this.bloomPass = new THREE.UnrealBloomPass(this.aspect_vec, 1.5, 0.4, 0.85);
+        this.bloomComposer = new THREE.EffectComposer( this.renderer );
+        this.finalComposer = new THREE.EffectComposer( this.renderer );
+
+
+        this.bloomPass.threshold = this.bloom_params.bloomThreshold;
+        this.bloomPass.strength = this.bloom_params.bloomStrength;
+        this.bloomPass.radius = this.bloom_params.bloomRadius;
+        this.bloomComposer.renderToScreen = false;
+        this.bloomComposer.addPass( this.renderScene );
+        this.bloomComposer.addPass( this.bloomPass );
+
+        this.finalPass = new THREE.ShaderPass(
+				new THREE.ShaderMaterial( {
+					uniforms: {
+						baseTexture: { value: null },
+						bloomTexture: { value: this.bloomComposer.renderTarget2.texture }
+					},
+					vertexShader: document.getElementById( 'vertexshader' ).textContent,
+					fragmentShader: document.getElementById( 'fragmentshader' ).textContent,
+					defines: {}
+				} ), "baseTexture"
+			);
+
+        this.finalPass.needsSwap = true;
+        this.finalComposer.addPass( this.renderScene );
+        this.finalComposer.addPass( this.finalPass );
+
 
         this.labelRenderer = new THREE.CSS2DRenderer();
         this.labelRenderer.setSize( window.innerWidth, window.innerHeight );
@@ -103,7 +154,19 @@ class WEBSCENE {
         });
 
         this.renderer.render(this.scene, this.camera);
+
+
+        //this.renderBloom( true );
+        this.bloomComposer.render();
+
+        // render the entire scene, then render bloom scene on top
+        this.finalComposer.render();
+        this.camera.layers.set(1);
+					this.bloomComposer.render();
+					this.camera.layers.set(0);
+
         this.labelRenderer.render(this.scene, this.camera);
+
         return this;
       }
 

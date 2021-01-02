@@ -230,6 +230,7 @@ star_scene.scene.add( axesHelper );
 
 const helper = new THREE.PolarGridHelper( radius, radials, circles, divisions );
 star_scene.scene.add( helper );
+//const bloomPass = new THREE.UnrealBloomPass(this.aspect_vec, 1.5, 0.4, 0.85);
 
 // Axes Helper
 

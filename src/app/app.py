@@ -5,6 +5,7 @@ import mimetypes
 from redis import Redis
 from flask import Flask, render_template, request, session
 from flask_socketio import SocketIO, emit, send
+from flask_webpack import Webpack
 from flask_bootstrap import Bootstrap
 # from flask_migrate import Migrate
 # from flask_sqlalchemy import SQLAlchemy
@@ -13,13 +14,25 @@ from py import main, app, socketio, redis
 from py.app_controller import SceneBuilder as sb
 from threading import Timer, Lock
 
+webpack = Webpack()
+
+
 app = Flask(__name__)
+params = {
+    'DEBUG': True,
+    'WEBPACK_MANIFEST_PATH': './build/manifest.json'
+}
+
+app.config.update(params)
+
+
 socket_ = SocketIO(app, async_mode=None)
+webpack.init_app(app)
 
 mimetypes.add_type('application/javascript', '.mjs')
 
 thread = None
-thread_lock = Lock()
+# thread_lock = Lock()
 # socketio = SocketIO(app, async_mode=None)
 # redis = Redis(host='redis', port=6379)
 
