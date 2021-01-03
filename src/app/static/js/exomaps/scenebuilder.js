@@ -97,7 +97,7 @@ class WEBSCENE {
         this.finalComposer.addPass( this.finalPass );
 
 
-        this.labelRenderer = new THREE.CSS2DRenderer();
+        this.labelRenderer = new THREE.CSS3DRenderer();
         this.labelRenderer.setSize( window.innerWidth, window.innerHeight );
         this.labelRenderer.domElement.style.position = 'absolute';
         this.labelRenderer.domElement.style.top = '0px';
@@ -179,6 +179,11 @@ class WEBSCENE {
         return this;
       }
 
+      addAny(stuff) {
+        this.objects.push(stuff);
+        this.scene.add(stuff);
+        return this;
+      }
 
       renderBloom( mask ) {
 

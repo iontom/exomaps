@@ -49,19 +49,35 @@ function roundRect(ctx, x, y, w, h, r)
 	ctx.stroke();
 }
 
+"use strict"
 class NameText {
     constructor(text, x, y, z) {
-        const solDiv = document.createElement( 'div' );
-        solDiv.className = 'starlabel';
-        solDiv.textContent = text;
-        solDiv.style.marginTop = '-1em';
-        const solLabel = new THREE.CSS2DObject( solDiv );
+        this.solDiv = document.createElement( 'div' );
+        this.solDiv.id = 'star-'+text;
+        this.solDiv.className = 'starlabel';
+        this.solDiv.textContent = text;
+        //console.log(this.solDiv);
+        //this.w = this.solDiv.element.style.width;
+        //this.solDiv.style.width = this.w;
+        this.solDiv.style.height = '0.7px';
+        this.solDiv.style.fontSize = '0.5px';
+
+        this.solLabel = new THREE.CSS3DObject( this.solDiv );
         //solLabel.position.set(rotateCoord(new THREE.Vector3( x, y, z + 10.)));
         var v = rotateCoord(new THREE.Vector3( x, y, z))
-        solLabel.position.set(v.x, v.y, v.z);
-        //star_scene.scene.add(solLabel);
-        return solLabel;
+        this.solLabel.position.set(v.x, v.y, v.z);
+        this.solLabel.quaternion.copy( star_scene.camera.quaternion );
+        star_scene.scene.add(this.solLabel);
+        //return this.solLabel;
     }
+    get label() {
+        return this.solLabel;
+    }
+
+    update(){
+        this.solLabel.quaternion.copy( star_scene.camera.quaternion );
+    }
+
 }
 
 
@@ -207,16 +223,14 @@ star_scene.scene.add( radialgrid );
 sol = new Star(0.5, 1, 0.6, 0.4, 0, 0, 0);
 //sol_text = add_star_text('SOL', 0, 0, 0);
 
-solLabel = new NameText('SOL', 0, 0, 0.5);
-//console.log('LABEL');
-//console.log(solLabel);
-//sol.sun.add( solLabel );
-star_scene.scene.add(solLabel);
+const solLabel = new NameText('SOL', 0, 0, 0.5*0.8);
+star_scene.addAny(solLabel);
+
 
 // And galactic center
 // -183.02454255340342	350.49518611376936	306.0312750916018
-// -1830.245425534034	3504.9518611376934	3060.3127509160176
-
+// 350                  0                   0
+// #TODO - rotate ALL STARS BASED ON THIS ROTATION
 // 499.62 distance
 gal_center = new Star(100, 0.1, 0.5, 0.5, -183, 350, 306);
 gal_center_aligned = new Star(100, 0.2, 0.2, 0.2, 350, 0, 0);
@@ -245,12 +259,15 @@ io_msg.on('from_flask', function(msg) {
 
 let star_params_arr = [];
 let star_arr = [];
+let label_arr = [];
 
 io_msg.on('make_star', function(args) {
     console.log('Creating Star w/ params: ' + args);
 
     star_arr.push(new Star(
-                 args[0],args[1],args[2],args[3],args[4],args[5],args[6]
+                 args[1],args[2],args[3],args[4],args[5],args[6],args[7]
                 ));
-
+    newLabel = new NameText(args[0], args[5],args[6],args[7]+args[1]);
+    label_arr.push(newLabel);
+    star_scene.addAny(newLabel);
 });

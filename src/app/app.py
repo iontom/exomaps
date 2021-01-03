@@ -94,7 +94,7 @@ def handle_message(msg):
 
     # Socket connected! Let's stream the stars!
     df = pd.read_sql_query("""SELECT 
-    size, r, g, b, x, y, z
+    name_code, size, r, g, b, x, y, z
     FROM dm_galaxy.star_render_info
     ORDER BY distance ASC
     LIMIT 100
