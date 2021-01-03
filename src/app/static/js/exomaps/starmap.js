@@ -79,29 +79,12 @@ class Star {
         // 0.34,1,0.9583,0.8512,-10.17,-7.88,1.97undefinedundefinedundefinedundefinedundefinedundefined
         //Create Sun Model
         this.sphereGeometry = new THREE.SphereGeometry( size*0.5, 16, 16 );
-        //this.sunTexture = star_scene.load_texture('static/img/sun_basic.jpg');
-
         this.sunTexture = new THREE.TextureLoader().load('static/img/sun_basic.jpg');
-        //this.texture2 = THREE.ImageUtils.loadTexture( 'static/img/sun_basic.jpg' );
-        //this.time = cosmosRender.getClock().getElapsedTime();
-//
-//        var sunMaterial = new THREE.MeshBasicMaterial( {
-////            color: 0xffffff,
-////            transparent: true,
-////            opacity: 0.7,
-//            map: this.sunTexture
-//        });
 
-//        this.sunMaterial = new THREE.MeshBasicMaterial( {
-//            color: rgbToHex(r, g, b),//0xffffff,
-//            transparent: true,
-//            opacity: 0.99,
-//            map: this.sunTexture
-//        });
         this.sunMaterial = new THREE.MeshBasicMaterial( {
             color: rgbToHex(r, g, b),//0xffffff,
             transparent: true,
-            opacity: 0.99,
+            opacity: 0.8,
             map: this.sunTexture
         });
 
@@ -116,59 +99,8 @@ class Star {
         this.fragmentShaderText = fragShaderText.replace('r_val', r).replace('g_val', g).replace('b_val', b);
 
 
-//        this.sunGlowMaterial = new THREE.ShaderMaterial( {
-//            uniforms: {
-//                baseTexture: { value: null },
-//                bloomTexture: { value: THREE.bloomComposer.renderTarget2.texture }
-//            },
-//            vertexShader: this.vertexShaderText,
-//            fragmentShader: this.fragmentShaderText,
-//            side: THREE.FrontSide,
-//            blending: THREE.AdditiveBlending,
-//            transparent: true
-//        });
-
-        // OLD STAR TYPE
-        this.sunGlowMaterial = new THREE.ShaderMaterial( {
-            uniforms: {
-                viewVector: { type: "v3", value: star_scene.camera.position },
-                texture: {
-                    type: 't',
-                    value: new THREE.TextureLoader().load('static/img/sun_small.jpg')
-                 },
-                glow: {
-                    type: 't',
-                    value: new THREE.TextureLoader().load('static/img/sun_glow.jpg')
-                }
-            },
-            vertexShader: this.vertexShaderText,
-            fragmentShader: this.fragmentShaderText,
-            side: THREE.FrontSide,
-            blending: THREE.AdditiveBlending,
-            transparent: true
-        });
-
-
         this.time = 0;
-//        this.uniforms = {
-//            texture: {
-//                type: 't',
-//                value: THREE.ImageUtils.loadTexture('static/img/sun_small.jpg')
-//            },
-//            glow: {
-//                type: 't',
-//                value: THREE.ImageUtils.loadTexture('static/img/sun_glow.jpg')
-//            },
-//            time: {
-//                type: 'f',
-//                value: this.time
-//            }
-//           };
 
-        this.sunGlowGeom = new THREE.SphereGeometry( size * 1.5 * 0.5, 16, 16);
-        this.sunGlow = new THREE.Mesh( this.sunGlowGeom, this.sunGlowMaterial );
-        this.sun.add(this.sunGlow);
-        this.sun.glow = this.sunGlow;
 
         var vector = new THREE.Vector3( x, y, z);
 
@@ -221,15 +153,51 @@ window.addEventListener("resize", function(event) {
 
 const radius = 200;
 const radials = 16;
-const circles = 100;
+const circles = 50;
 const divisions = 64;
-
 
 const axesHelper = new THREE.AxesHelper( 5 );
 star_scene.scene.add( axesHelper );
 
-const helper = new THREE.PolarGridHelper( radius, radials, circles, divisions );
-star_scene.scene.add( helper );
+
+const radialgrid = new THREE.PolarGridHelper( radius, radials, circles, divisions );
+
+var geometry = new THREE.CylinderBufferGeometry(10, 10, 20, 16, 4, true);
+geometry.computeBoundingBox();
+
+var bbox = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( { color: "blue" } ) );
+//star_scene.scene.add(bbox);
+
+radialgrid.material = new THREE.ShaderMaterial({
+  uniforms: {
+    color1: {
+      value: new THREE.Color("blue")
+    },
+    color2: {
+      value: new THREE.Color("black")
+    },
+    resolution: { type: "v2", value: new THREE.Vector2() },
+    time: { type: "f", value: 70 }
+//    bboxMin: {
+//      value: geometry.boundingBox.min
+//    },
+//    bboxMax: {
+//      value: geometry.boundingBox.max
+//    }
+  },
+  vertexShader: document.getElementById("gridVshader").textContent,
+  fragmentShader: document.getElementById("gridFshader").textContent,
+//
+//          this.vertexShaderText = document.getElementById("vertexshader").textContent;
+//        var fragShaderText = document.getElementById("fragmentshader").textContent;
+//
+  wireframe: false,
+  transparent: true
+});
+
+star_scene.scene.add( radialgrid );
+
+//star_scene.darken(helper);
 //const bloomPass = new THREE.UnrealBloomPass(this.aspect_vec, 1.5, 0.4, 0.85);
 
 // Axes Helper
@@ -240,8 +208,8 @@ sol = new Star(0.5, 1, 0.6, 0.4, 0, 0, 0);
 //sol_text = add_star_text('SOL', 0, 0, 0);
 
 solLabel = new NameText('SOL', 0, 0, 0.5);
-console.log('LABEL');
-console.log(solLabel);
+//console.log('LABEL');
+//console.log(solLabel);
 //sol.sun.add( solLabel );
 star_scene.scene.add(solLabel);
 
@@ -250,8 +218,8 @@ star_scene.scene.add(solLabel);
 // -1830.245425534034	3504.9518611376934	3060.3127509160176
 
 // 499.62 distance
-gal_center = new Star(100, 0.5, 0.5, 0.5, -183, 350, 306);
-gal_center_aligned = new Star(100, 1, 1, 1, 350, 0, 0);
+gal_center = new Star(100, 0.1, 0.5, 0.5, -183, 350, 306);
+gal_center_aligned = new Star(100, 0.2, 0.2, 0.2, 350, 0, 0);
 
 
 let stars = [];
