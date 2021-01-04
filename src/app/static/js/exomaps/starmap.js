@@ -25,10 +25,34 @@ class Cube {
   }
 }
 
+//function MakeMatrix( Vector_old, Vector_new ) {
+//    // make sure that we actually have two unique vectors.
+//    //assert( X != Y );
+//
+//    const m = new Matrix3();
+//    M.X = Vector_old.normalise;
+//    M.Z = ()//normalise( cross_product(X,Y) );
+//    M.Y = //normalise( cross_product(M.Z,X) );
+//    return M;
+//}
+
+// COORDINATE TRANSFORM FROM EQUATORIAL TO GALACTIC
+// -183.02454255340342	350.49518611376936	306.0312750916018
+// 350                  0                   0
+var q_fix = new THREE.Quaternion(); // create one and reuse it
+var v_mw = new THREE.Vector3( -183.02454255340342,	350.49518611376936,	306.0312750916018);
+var v_mw_fix = new THREE.Vector3( 350, 0, 0);
+
+q_fix.setFromUnitVectors( v_mw, v_mw_fix );
+//var matrix_fix = new THREE.Matrix4();
+//matrix_fix.makeRotationFromQuaternion( q_fix );
+
 function rotateCoord(vec) {
     var axis = new THREE.Vector3( 1, 0, 0 );
     var angle = Math.PI / 2;
-    return vec.applyAxisAngle( axis, angle );
+    vec.applyAxisAngle( axis, angle );
+    //vec.applyQuaternion( q_fix );
+    return vec;
 }
 
 // function for drawing rounded rectangles
@@ -48,6 +72,36 @@ function roundRect(ctx, x, y, w, h, r)
     ctx.fill();
 	ctx.stroke();
 }
+
+
+class SkyDome {
+    constructor() {
+        var geometry = new THREE.SphereGeometry(350, 60, 40);
+//        var uniforms = {
+//          mway: { type: 't', value: new THREE.TextureLoader().load('static/img/mway.jpg') }
+//        };
+
+        var material = new THREE.MeshPhongMaterial( {
+          map: new THREE.TextureLoader().load('static/img/mway.jpg'),
+          shading: THREE.FlatShading,
+          side: THREE.BackSide
+//          vertexShader:   document.getElementById('sky-vertex').textContent,
+//          fragmentShader: document.getElementById('sky-fragment').textContent
+        });
+
+        this.skyBox = new THREE.Mesh(geometry, material);
+        this.skyBox.scale.set(-1, 1, 1);
+        this.skyBox.eulerOrder = 'XZY';
+        this.skyBox.renderDepth = 1000.0;
+        //declared once at the top of your code
+        var axis = new THREE.Vector3(0,1,0);//tilted a bit on x and y - feel free to plug your different axis here
+        //in your update/draw function
+        this.skyBox.rotateOnAxis(axis,Math.PI);
+        star_scene.scene.add(this.skyBox);
+    }
+
+}
+
 
 "use strict"
 class NameText {
@@ -152,6 +206,25 @@ class Star {
 }
 
 
+class LineB {
+    constructor(x1, y1, z1, x2, y2, z2, hex) {
+        const points = [];
+
+        points.push( rotateCoord(new THREE.Vector3( x1, y1, z1)) );
+        points.push( rotateCoord(new THREE.Vector3( x2, y2, z2)) );
+
+        const geometry = new THREE.BufferGeometry().setFromPoints( points );
+        const m1 = new THREE.MeshBasicMaterial({color: hex});
+        this.line = new THREE.Line( geometry, m1 );
+        star_scene.scene.add(this.line);
+    }
+    get LineObj() {
+        return this.line;
+    }
+
+}
+
+
 
 document.addEventListener("DOMContentLoaded", function(event){
   // your code here
@@ -213,6 +286,7 @@ radialgrid.material = new THREE.ShaderMaterial({
 
 star_scene.scene.add( radialgrid );
 
+
 //star_scene.darken(helper);
 //const bloomPass = new THREE.UnrealBloomPass(this.aspect_vec, 1.5, 0.4, 0.85);
 
@@ -227,13 +301,27 @@ const solLabel = new NameText('SOL', 0, 0, 0.5*0.8);
 star_scene.addAny(solLabel);
 
 
+//var dirLight = new THREE.DirectionalLight(0xffffff, 1);
+//dirLight.position.set(5, 3, 5);
+//star_scene.scene.add(dirLight);
+//const light = new THREE.AmbientLight( 0x041024 ); // soft white light 0x0e1217
+const light = new THREE.AmbientLight( 0x041024 ); // soft white light
+star_scene.scene.add( light );
+
+const SD = new SkyDome();
+
+// -10.17,-7.88,1.97
+// starlane
+//ace_route = new LineB(0,0,0,-10.17,-7.88,1.97, 0x25badb);
+
+
 // And galactic center
 // -183.02454255340342	350.49518611376936	306.0312750916018
 // 350                  0                   0
 // #TODO - rotate ALL STARS BASED ON THIS ROTATION
 // 499.62 distance
-gal_center = new Star(100, 0.1, 0.5, 0.5, -183, 350, 306);
-gal_center_aligned = new Star(100, 0.2, 0.2, 0.2, 350, 0, 0);
+//gal_center = new Star(100, 0.1, 0.5, 0.5, -183, 350, 306);
+gal_center_aligned = new Star(50, 0.2, 0.3, 0.4, 350, 0, 0);
 
 
 let stars = [];
@@ -260,14 +348,33 @@ io_msg.on('from_flask', function(msg) {
 let star_params_arr = [];
 let star_arr = [];
 let label_arr = [];
+let line_arr = [];
 
 io_msg.on('make_star', function(args) {
     console.log('Creating Star w/ params: ' + args);
+    arg_name = args[0];
+    arg_size = args[1];
+    arg_r = args[2];
+    arg_g = args[3];
+    arg_b = args[4];
+    arg_x = args[5];
+    arg_y = args[6];
+    arg_z = args[7];
+
+    pos = rotateCoord(new THREE.Vector3(arg_x, arg_y, arg_z)).applyQuaternion(q_fix);
+    //l_pos = rotateCoord(new THREE.Vector3(arg_x, arg_y, arg_z + arg_size)).applyQuaternion(q_fix);
+
 
     star_arr.push(new Star(
-                 args[1],args[2],args[3],args[4],args[5],args[6],args[7]
+                 //args[1],args[2],args[3],args[4],args[5],args[6],args[7]
+                 arg_size, arg_r, arg_g, arg_b, pos.x, pos.y, pos.z
                 ));
-    newLabel = new NameText(args[0], args[5],args[6],args[7]+args[1]);
+
+    // args[0], args[5],args[6],args[7]+args[1]
+    newLabel = new NameText(arg_name, pos.x, pos.y, pos.z+arg_size);
     label_arr.push(newLabel);
     star_scene.addAny(newLabel);
+
+    // args[5],args[6],args[7],args[5],args[6]
+    line_arr.push(new LineB(pos.x, pos.y, pos.z, pos.x, pos.y, 0.0, 0x00035e));
 });
