@@ -29,6 +29,24 @@ services:
         image: redis
         # network_mode: "host"
 
+    data:
+        restart: always
+        image: postgres:12.1-alpine
+         # command: "true"
+         ports:
+           - "5432:5433"
+         network_mode: bridge
+         container_name: postgres
+
+         environment:
+           POSTGRES_USER: 'postgres'
+           POSTGRES_PASSWORD: 'pgpass'
+           POSTGRES_DB: 'postgrse'
+
+         volumes:
+           - db-data:/var/lib/postgresql/data
+
+
 # version: '3'
 
 # services:

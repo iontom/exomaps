@@ -3,6 +3,7 @@
 *.code-workspace
 exo_ws.code-workspace
 .env
+*.db_env
 
 
 # Byte-compiled / optimized / DLL files
