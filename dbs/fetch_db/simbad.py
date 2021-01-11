@@ -5,33 +5,10 @@ import urllib
 import io
 import os
 import pandas as pd
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import create_engine
+# from sqlalchemy import create_engine
 
 
-def fetch_query(query, target_table):
-    url_code = 'http://simbad.u-strasbg.fr/simbad/sim-tap/sync?request=doQuery&lang=adql&format=text&'+\
-            'query=' + urllib.parse.quote(query)
-            #'query=SELECT%20TOP%2010%20MAIN_ID,RA,DEC%20FROM%20BASIC%20WHERE%20rvz_redshift%20%3E%203.3'
 
-    print('Running data for {}'.format(target_table))
-    # print(url_code)
-    urlData = requests.get(url_code).content
-    df_simbad = pd.read_csv(io.StringIO(urlData.decode('utf-8')), sep='|', skiprows=[1], header=0, skipinitialspace=True)
-    print(df_simbad.head(5))
-    
-
-    database_uri = 'postgresql+psycopg2://{dbuser}:{dbpass}@{dbhost}:{dbport}/{dbname}'.format(
-        dbuser=os.environ['DBUSER'],
-        dbpass=os.environ['DBPASS'],
-        dbhost=os.environ['DBHOST'],
-        dbname='exomaps_app',
-        dbport=os.environ['DBPORT']
-    )
-
-    db = create_engine(database_uri)
-    df_simbad.columns = df_simbad.columns.str.strip()
-    df_simbad.to_sql(target_table, db, schema='stg_data', if_exists='replace')
 
 # query = """SELECT * 
 #     FROM  mesDistance d
@@ -50,49 +27,75 @@ def fetch_query(query, target_table):
 #     ORDER BY dist ASC
 # """
 
-q_basic = """SELECT DISTINCT B.* 
-            FROM BASIC B
-            JOIN mesDistance D
-            ON B.oid = D.oidref
-            AND D.dist <= 50
-            """
+class Simbad:
+    def __init__(self, engine, version):
 
-fetch_query(q_basic, 'simbad_basic_v1')
+        self.engine = engine
+        self.version = version
 
-# OTYPES + OTYPEDEF custom query
-q_otype = """SELECT OT.oidref, OT.otype,
-            OTD.otype_longname, OTD.otype_shortname
-            FROM OTYPES OT
-            LEFT JOIN OTYPEDEF OTD
-            ON OT.otype = OTD.otype
-            JOIN mesDistance D
-            ON OT.oidref = D.oidref
-            AND D.dist <= 50
-            """
-
-fetch_query(q_otype, 'simbad_otype_v1')
-
-# OTYPES + OTYPEDEF custom query
-q_dist = """SELECT *
-            FROM mesDistance D
-            WHERE D.dist <= 50
-            """
-
-fetch_query(q_dist, 'simbad_dist_v1')
-
-table_list = [
-    'mesVAR', 'mesVelocities', 'mesRot', 'mesPM', 'IDENT', 'ALLFLUXES', 'MESDIAMETER', 'MESPM', 
-    'MESVELOCITIES', 'MESIUE', 'MESHERSCHEL', 'MESFE_H', 'MESMK', 'MESPLX'
-    ]  
-
-for src_table in table_list:
-
-    q_template = """SELECT DISTINCT A.* 
-                FROM {} A
+        # Query to grab all objects under 50 LY
+        self.q_basic = """SELECT DISTINCT B.* 
+                FROM BASIC B
                 JOIN mesDistance D
-                ON A.oidref = D.oidref
+                ON B.oid = D.oidref
                 AND D.dist <= 50
-        """.format(src_table)
-    
-    fetch_query(q_template,  'simbad_' + src_table.lower() + '_v1')
-    
+                """
+
+        # OTYPES + OTYPEDEF custom query
+        self.q_otype = """SELECT OT.oidref, OT.otype,
+                    OTD.otype_longname, OTD.otype_shortname
+                    FROM OTYPES OT
+                    LEFT JOIN OTYPEDEF OTD
+                    ON OT.otype = OTD.otype
+                    JOIN mesDistance D
+                    ON OT.oidref = D.oidref
+                    AND D.dist <= 50
+                    """
+
+        # OTYPES + OTYPEDEF custom query
+        self.q_dist = """SELECT *
+                    FROM mesDistance D
+                    WHERE D.dist <= 50
+                    """
+
+        # The list of objects that follow a formula that can be brought over
+        self.table_list = [
+            'mesVAR', 'mesVelocities', 'mesRot', 'mesPM', 'IDENT', 'ALLFLUXES', 'MESDIAMETER', 'MESPM',
+            'MESVELOCITIES', 'MESIUE', 'MESHERSCHEL', 'MESFE_H', 'MESMK', 'MESPLX'
+            ]
+
+    # REST Call for CSV Grab
+    def fetch_simbad(engine, query, target_table):
+        url_code = 'http://simbad.u-strasbg.fr/simbad/sim-tap/sync?request=doQuery&lang=adql&format=text&' + \
+                   'query=' + urllib.parse.quote(query)
+        # 'query=SELECT%20TOP%2010%20MAIN_ID,RA,DEC%20FROM%20BASIC%20WHERE%20rvz_redshift%20%3E%203.3'
+
+        print('Running data for {}'.format(target_table))
+        # print(url_code)
+        urlData = requests.get(url_code).content
+        df_simbad = pd.read_csv(io.StringIO(urlData.decode('utf-8')), sep='|', skiprows=[1], header=0,
+                                skipinitialspace=True)
+        print(df_simbad.head(5))
+
+        df_simbad.columns = df_simbad.columns.str.strip()
+        df_simbad.to_sql(target_table, engine, schema='stg_data', if_exists='replace')
+
+
+    # Using the formulaic join format, use the inner join to pull all the necessary tables
+    def run_etl(self):
+
+        self.fetch_simbad(self.q_basic, 'simbad_basic_v'+str(self.version))
+        self.fetch_query(self.q_otype, 'simbad_otype_v'+str(self.version))
+        self.fetch_query(self.q_dist, 'simbad_dist_v'+str(self.version))
+
+        for src_table in self.table_list:
+
+            q_template = """SELECT DISTINCT A.* 
+                        FROM {} A
+                        JOIN mesDistance D
+                        ON A.oidref = D.oidref
+                        AND D.dist <= 50
+                """.format(src_table)
+
+            self.fetch_query(q_template,  'simbad_' + src_table.lower() + '_v'+str(self.version))
+

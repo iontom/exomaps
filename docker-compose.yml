@@ -6,6 +6,28 @@ version: '3'
 #              config:
 #                  - subnet: 10.5.0.0/16
 services:
+    redis:
+        image: redis
+        # network_mode: "host"
+    db:
+      image: "postgres:12.1-alpine"
+      ports:
+        - "5432:5432"
+      volumes:
+        - "dbdata:/var/lib/postgresql/data"
+      env_file:
+        - dbs/.db_env
+      networks:
+        - backend
+    etl:
+        build: dbs/
+        env_file: dbs/.db_env
+        depends_on:
+            - redis
+            - db
+        networks:
+            - backend
+
     web:
         build: src/
         ports:
@@ -19,32 +41,28 @@ services:
         env_file: .env
         depends_on:
             - redis
+            - db
+            - etl
         environment:
             - PYTHONUNBUFFERED=0
         # command: ./docker-entrypoint.sh
         # network_mode: "host"
         # entrypoint: docker-entrypoint.sh
+#        networks:
+#            - db_nw
         
-    redis:
-        image: redis
-        # network_mode: "host"
 
-    data:
-        restart: always
-        image: postgres:12.1-alpine
-         # command: "true"
-         ports:
-           - "5432:5433"
-         network_mode: bridge
-         container_name: postgres
-
-         environment:
-           POSTGRES_USER: 'postgres'
-           POSTGRES_PASSWORD: 'pgpass'
-           POSTGRES_DB: 'postgrse'
-
-         volumes:
-           - db-data:/var/lib/postgresql/data
+networks:
+  backend:
+    driver: bridge
+#  db_nw:
+#    driver: bridge
+#  etl_nw:
+#    driver: bridge
+#  web_nw:
+#    driver: bridge
+volumes:
+  dbdata:
 
 
 # version: '3'
