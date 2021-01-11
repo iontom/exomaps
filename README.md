@@ -27,3 +27,5 @@ This is a first round build, I anticipate that I may need a 2nd or 3rd build bef
 * Refactor fully to the "FRED" stack for compiling Node packages into WebPack
 * Possibly ditching ThreeJS for something more performant using WebAssembly or waiting for WebGPU
 * Represent Industrial & Commodity Process Flows + Entity Ownership Networks via GoJS
+
+## Email iontom@gmail.com with any questions
